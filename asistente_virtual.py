@@ -1,4 +1,4 @@
-import pyttsx3 as psx
+import pyttsx3
 import speech_recognition as sr
 import pywhatkit as pk
 import yfinance as yf
@@ -8,6 +8,8 @@ import wikipedia
 
 # escuchar microfono y devolver el audio como texto
 def transformar_audio_a_texto():
+
+    
 
     # almacenar reognizer
     r = sr.Recognizer()
@@ -60,5 +62,15 @@ def transformar_audio_a_texto():
 
             # devolver error
             return "Sigo esperando"
-        
-transformar_audio_a_texto()
+
+# funcion para que el asistente pueda ser escuchado
+def voz_asistente(mensaje):
+
+    # encender el motor de pyttsx3
+    engine = pyttsx3.init()
+
+    # pronunciar mensaje
+    engine.say(mensaje)
+    engine.runAndWait()
+
+voz_asistente("Hola mundo")
