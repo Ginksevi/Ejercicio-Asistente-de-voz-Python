@@ -1,7 +1,8 @@
 import pyttsx3
 import speech_recognition as sr
-import pywhatkit as pk
+import pywhatkit
 import yfinance as yf
+import pyjokes
 import webbrowser
 import datetime
 import wikipedia
@@ -151,4 +152,41 @@ def pedido():
         elif "que hora es" in solicitud:
             pedir_hora()
             continue
+        elif "busca en wikipedia" in solicitud:
+            voz_asistente("Buscandola informacion en wikipedia")
+            solicitud = solicitud.replace("wikioedia", "")
+            wikipedia.set_lang("es")
+            resultado = wikipedia.summary(solicitud, sentences=1)
+            voz_asistente("Wikipedia dice lo siguiente")
+            voz_asistente(resultado)
+            continue
+        elif "busca en internet" in solicitud:
+            voz_asistente("Ya mismo estoy en eso")
+            solicitud = solicitud.replace("busca en internet", "")
+            pywhatkit.search(solicitud)
+            voz_asistente("Esto es lo que e encontrado")
+            continue
+        elif "reproducir" in solicitud:
+            voz_asistente("Claro, empezare a reproducirlo")
+            pywhatkit.search(solicitud)
+        elif "chiste" in solicitud:
+            voz_asistente(pyjokes.get_joke("es"))
+            continue
+        elif "precio" in solicitud:
+            accion = solicitud.split("de")[-1].strip()
+            cartera = {"apple":"APPL",
+                       "amazon":"AMZN",
+                       "google":"GOOGL"}
+            try:
+                accion_buscada = cartera[accion]
+                accion_buscada = yf.Ticker(accion_buscada)
+                precio_actual = accion_buscada.info["regularMarketPrice"]
+                voz_asistente(f"La encontre, el precio de {accion} es {precio_actual}")
+                continue
+            except:
+                voz_asistente("Discupe, no la e encontrado")
+                continue
+        elif "adiós" in solicitud:
+            voz_asistente("Esta bien, que descanses, cualquier otra cosa que necesites hazmelo saber, estare atenta")
+            break
 
