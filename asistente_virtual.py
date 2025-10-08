@@ -6,6 +6,9 @@ import webbrowser
 import datetime
 import wikipedia
 
+# voz del asistente
+id_sabina = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0"
+
 # escuchar microfono y devolver el audio como texto
 def transformar_audio_a_texto():
 
@@ -68,9 +71,55 @@ def voz_asistente(mensaje):
 
     # encender el motor de pyttsx3
     engine = pyttsx3.init()
+    engine.setProperty("voice", id_sabina)
 
     # pronunciar mensaje
     engine.say(mensaje)
     engine.runAndWait()
 
-voz_asistente("Hola mundo")
+# informar el dia de la semana
+def pedir_dia():
+
+    # variable con datos de hoy
+    dia = datetime.datetime.today()
+
+    # variable del dia de la semana
+    dia_semana = dia.weekday()
+
+    # diccionario de los dias
+    calendario = {0:"Lunes",
+                  1:"Martes",
+                  2:"Miércoles",
+                  3:"Jueves",
+                  4:"Viernes",
+                  5:"Sábado",
+                  6:"Domingo"}
+    
+    # decir dia de la semana
+    voz_asistente(f"Hoy es {calendario[dia_semana]}")
+
+# informar la hora
+def pedir_hora():
+    
+    #variable con datos de la hora
+    hora = datetime.datetime.now()
+    hora = f"En este momento son las {hora.hour} horas con {hora.minute} minutos"
+    # decir la hora
+    voz_asistente(hora)
+
+# funcion saludo inicial
+def saludo_inicial():
+
+    # variable con datos de hora
+    hora = datetime.datetime.now()
+    if hora.hour < 6 or hora.hour > 18:
+        momento = "Buenas noches"
+    elif 6 <= hora.hour <13:
+        momento = "Buenos dias"
+    else:
+        momento = "Buenas tardes"
+
+    # decir saludo
+    voz_asistente(f"{momento}, soy Sabrina tu asistente personal")
+
+saludo_inicial()
